@@ -6,16 +6,19 @@ using System.Collections.Generic;
 public class PoolQueue<T> : Node where T : StaticBody
 {
 	/* seperate the object pool out... eventually */
-	private T[] Head = new T[3];
+	private int NumOfLanes;
+	private T[] Head;
 	private List<PooledObject<T>> ObjTypes = new List<PooledObject<T>>();
 	private Spatial Other;
 	private Vector3 Speed = Vector3.Back * 50f;
 	
 	public PoolQueue(){}
 	
-	public PoolQueue(Spatial Other)
+	public PoolQueue(Spatial Other, int NumOfLanes)
 	{
 		this.Other = Other;
+		this.NumOfLanes = NumOfLanes;
+		Head = new T[NumOfLanes];
 	}
 	
 	public void AddObjType(string ScenePath, int InitCount=1)
@@ -36,10 +39,10 @@ public class PoolQueue<T> : Node where T : StaticBody
 	
 	public void Enqueue((int ObjNum, Vector3 Scale)[] Platform)
 	{
-		T[] NewHead = new T[3];
+		T[] NewHead = new T[NumOfLanes];
 		for (int n=0; n<Platform.Length; n++)
 		{
-			Transform SpawnLoc = Head[n].GetNode<Spatial>("end").GlobalTransform;
+			Transform SpawnLoc = Head[n].GetNode<Spatial>("Back").GlobalTransform;
 			NewHead[n] = ObjTypes[Platform[n].ObjNum].Summon(SpawnLoc, Platform[n].Scale);
 		}
 		Head = NewHead;
@@ -59,17 +62,7 @@ public class PoolQueue<T> : Node where T : StaticBody
 	
 	public float GetHeight(int row)
 	{
-		return Head[row].GetNode<Spatial>("end").GlobalTransform.origin.y;
-	}
-	
-	public float GetAverageRowHeight()
-	{
-		float average = 0f;
-		for (int n=0; n<Head.Length; n++)
-		{
-			average += Head[n].GetNode<Spatial>("end").GlobalTransform.origin.y;
-		}
-		return average;
+		return Head[row].GetNode<Spatial>("Back").GlobalTransform.origin.y;
 	}
 
 	public void MoveObjects(float Speed, float delta)

@@ -7,7 +7,8 @@ public class Belt : Spatial
 	
 	public PoolQueue<StaticBody> platformQueue;
 	public ulong distance {get; set;} = 0;
-	private float Speed = 50f;
+	private float Speed = 40f;
+	private int NumOfLanes = 3;
 	
 	Area Despawn;
 	Area Spawn;
@@ -24,48 +25,84 @@ public class Belt : Spatial
 		Spawn = GetNode<Area>("Spawn");
 		Spawn.Connect("LowSpawn", this, "on_SpawnNewPlatformsArea");
 		
-		platformQueue = new PoolQueue<StaticBody>(this);
+		platformQueue = new PoolQueue<StaticBody>(this, NumOfLanes);
 		
 		// platforms
-		platformQueue.AddObjType("res://scenes/Platforms/Platform.tscn", 15);
 		platformQueue.AddObjType("res://scenes/Platforms/Stair.tscn", 15);
-		//platformQueue.AddObjType("res://scenes/Platforms/Empty.tscn", 15);
 		platformQueue.AddObjType("res://scenes/Platforms/Down.tscn", 15);
+		platformQueue.AddObjType("res://scenes/Platforms/Flat.tscn", 15);
+		platformQueue.AddObjType("res://scenes/Platforms/Up.tscn", 15);
 	}
 	
-	public override void _Process(float delta) 
+	public override void _PhysicsProcess(float delta) 
 	{
 		if (distance == 0)
-		{
-			(int, Vector3, float) InitalPlatformLeft = (0, new Vector3(3f, 1f, 5f), -6f);
-			(int, Vector3, float) InitalPlatformMiddle = (0, new Vector3(3f, 1f, 5f), 0f);
-			(int, Vector3, float) InitalPlatformRight = (0, new Vector3(3f, 1f, 5f), 6f);
-			(int, Vector3, float)[] InitalPlatforms = {InitalPlatformLeft, InitalPlatformMiddle, InitalPlatformRight};
-			platformQueue.InitalizePlatforms(InitalPlatforms);
-		}
+			InitalizeLanes();
 
 		platformQueue.MoveObjects(Speed, delta);
 		distance++;
 	}
+
+	private void InitalizeLanes()
+	{
+		int type = 2;
+		Vector3 scale = new Vector3(2f, 1f, 10f);
+		float spacing = 8f;
+		(int, Vector3, float)[] InitalPlatforms = new (int, Vector3, float)[NumOfLanes];
+		for (int n=0; n<NumOfLanes; n++)
+		{
+			int placement = n - (NumOfLanes / 2);
+			InitalPlatforms[n] = (type, scale, placement * spacing);
+		}
+		platformQueue.InitalizePlatforms(InitalPlatforms);
+	}
 	
 	private void SummonPlatformRow()
 	{
-		(int, Vector3)[] Platforms = new (int, Vector3)[3];
-		float[] Heights = new float[3];
-		for(int n=0; n<3; n++)
+		(int, Vector3)[] Platforms = new (int, Vector3)[NumOfLanes];
+		float[] Heights = new float[NumOfLanes];
+		for(int n=0; n<NumOfLanes; n++)
 			Heights[n] = platformQueue.GetHeight(n);
 		
-		for (int n=0; n<3; n++)
+	
+		for (int n=0; n<NumOfLanes; n++)
 		{
-			if (Heights[n] <= 0f)
-				Platforms[n] = (1, new Vector3(3f, 1f, 3f));
-			else if (Heights[n] >= 25f)
-				Platforms[n] = (2, new Vector3(3f, 1f, 3f));
-			else
-				Platforms[n] = (rand.Next(3), new Vector3(3f, 1f, 3f));
+			int type = RandomPlatformType(Heights[n]);
+			Platforms[n] = (type, new Vector3(2f, 1f, 2f) * RandomWidth());
 		}
 		
 		platformQueue.Enqueue(Platforms);
+	}
+
+	private int RandomPlatformType(float Height)
+	{
+		int type;
+		if (Height <= 0f)
+			type = 0;
+		else if (Height >= 15f)
+			type = 1;
+		else
+		{
+			float w1 = (float) rand.NextDouble();
+			if (w1 < 0.1)
+				type = rand.Next(2) == 0 ? 0 : 3;
+			else if (w1 < 0.2)
+				type = 1;
+			else
+				type = 2;
+		}
+
+		return type;
+	}
+
+	private Vector3 RandomWidth()
+	{
+		float w1 = (float) rand.NextDouble();
+		if (w1 < 0.1)
+			return new Vector3(0.25f, 1f, 1f);
+		if (w1 < 0.2)
+			return new Vector3(0.5f, 1f, 1f);
+		return Vector3.One;
 	}
 	
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

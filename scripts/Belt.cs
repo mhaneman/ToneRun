@@ -40,7 +40,6 @@ public class Belt : Spatial
 			(int, Vector3, float) InitalPlatformLeft = (0, new Vector3(3f, 1f, 5f), -6f);
 			(int, Vector3, float) InitalPlatformMiddle = (0, new Vector3(3f, 1f, 5f), 0f);
 			(int, Vector3, float) InitalPlatformRight = (0, new Vector3(3f, 1f, 5f), 6f);
-
 			(int, Vector3, float)[] InitalPlatforms = {InitalPlatformLeft, InitalPlatformMiddle, InitalPlatformRight};
 			platformQueue.InitalizePlatforms(InitalPlatforms);
 		}
@@ -48,6 +47,29 @@ public class Belt : Spatial
 		platformQueue.MoveObjects(Speed, delta);
 		distance++;
 	}
+	
+	private void SummonPlatformRow()
+	{
+		(int, Vector3)[] Platforms = new (int, Vector3)[3];
+		float[] Heights = new float[3];
+		for(int n=0; n<3; n++)
+			Heights[n] = platformQueue.GetHeight(n);
+		
+		for (int n=0; n<3; n++)
+		{
+			if (Heights[n] <= 0f)
+				Platforms[n] = (1, new Vector3(3f, 1f, 3f));
+			else if (Heights[n] >= 25f)
+				Platforms[n] = (2, new Vector3(3f, 1f, 3f));
+			else
+				Platforms[n] = (rand.Next(3), new Vector3(3f, 1f, 3f));
+		}
+		
+		platformQueue.Enqueue(Platforms);
+	}
+	
+	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+	/* Signals */
 	
 	private void on_DespawnPlatformArea(object body)
 	{
@@ -57,12 +79,7 @@ public class Belt : Spatial
 	private void on_SpawnNewPlatformsArea()
 	{
 		if (distance > 0)
-		{
-			int type = rand.Next(3);
-			(int, Vector3) Platform = (type, new Vector3(3f, 1f, 3f));
-			(int, Vector3)[] Platforms = {Platform, Platform, Platform};
-			platformQueue.Enqueue(Platforms);
-		}
+			SummonPlatformRow();
 	}
 	
 	private void on_PlayerDied()

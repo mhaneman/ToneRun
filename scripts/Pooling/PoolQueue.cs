@@ -56,6 +56,21 @@ public class PoolQueue<T> : Node where T : StaticBody
 			}
 		}
 	}
+	
+	public float GetHeight(int row)
+	{
+		return Head[row].GetNode<Spatial>("end").GlobalTransform.origin.y;
+	}
+	
+	public float GetAverageRowHeight()
+	{
+		float average = 0f;
+		for (int n=0; n<Head.Length; n++)
+		{
+			average += Head[n].GetNode<Spatial>("end").GlobalTransform.origin.y;
+		}
+		return average;
+	}
 
 	public void MoveObjects(float Speed, float delta)
 	{

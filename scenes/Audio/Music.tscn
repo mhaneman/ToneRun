@@ -6,7 +6,7 @@
 [ext_resource path="res://assets/sounds/music/yellow.wav" type="AudioStream" id=4]
 [ext_resource path="res://assets/sounds/music/green.wav" type="AudioStream" id=5]
 [ext_resource path="res://assets/sounds/music/red.wav" type="AudioStream" id=6]
-[ext_resource path="res://scenes/Audio/Music.cs" type="Script" id=7]
+[ext_resource path="res://scripts/Music.cs" type="Script" id=7]
 [ext_resource path="res://assets/sounds/music/black.wav" type="AudioStream" id=8]
 
 [node name="Music" type="Node"]

@@ -20,12 +20,4 @@ material/0 = SubResource( 2 )
 shape = SubResource( 1 )
 
 [node name="end" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.99 )
-
-[node name="FruitRegion" type="Spatial" parent="."]
-
-[node name="front" type="Spatial" parent="FruitRegion"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -10 )
-
-[node name="back" type="Spatial" parent="FruitRegion"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -20 )

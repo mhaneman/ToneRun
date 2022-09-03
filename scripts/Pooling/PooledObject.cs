@@ -3,10 +3,10 @@ using System;
 
 using System.Collections.Generic;
 
-public class PooledObject<T> where T : Spatial
+public class PooledObject<T> where T : StaticBody
 {
 	private Transform discardLoc = new Transform();
-	private LinkedList<T> working = new LinkedList<T>(); // eventually make double linked list
+	public LinkedList<T> working = new LinkedList<T>(); // eventually make double linked list
 	private Stack<T> retired = new Stack<T>();
 	
 	private Spatial Other;
@@ -94,6 +94,9 @@ public class PooledObject<T> where T : Spatial
 		t.GlobalTransform = discardLoc;
 		t.Visible = false;
 		retired.Push(t);
+
+		GD.Print("working: ", working.Count, " retired: ", 
+			retired.Count, " ", ScenePath);
 	}
 	
 	public void Clear()

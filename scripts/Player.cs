@@ -6,12 +6,11 @@ public class Player : KinematicBody
 	float switch_speed = 30f;
 	float gravity = 1.3f;
 	float jump_power = 35f;
-	float max_terminal_velocity = 60f;
+	float max_terminal_velocity = 200f;
 	
 	private Spatial camera_pivot;
 	private Camera camera;
 	
-	private float y_vel;
 	private Vector3 velocity;
 	
 	private Godot.Collections.Array<Spatial> lanes = new Godot.Collections.Array<Spatial>();
@@ -39,9 +38,7 @@ public class Player : KinematicBody
 		camera_pivot = GetNode<Spatial>("CameraPivot");
 		camera = GetNode<Camera>("CameraPivot/CameraBoom/Camera");
 		
-		lanes.Add(GetNode<Spatial>("/root/Main/Treadmill/BeltLeft"));
 		lanes.Add(GetNode<Spatial>("/root/Main/Treadmill/BeltMiddle"));
-		lanes.Add(GetNode<Spatial>("/root/Main/Treadmill/BeltRight"));
 		
 		current_lane = lanes.Count / 2;
 		wanted_lane = lanes.Count / 2;
@@ -64,35 +61,27 @@ public class Player : KinematicBody
 		
 		if (direction == "jump" && IsOnFloor())
 		{
-			y_vel = jump_power;
+			velocity.y = jump_power;
 			Jump.Play();
 		}
 		
 		if (direction == "down" && !IsOnFloor())
 		{
 			GD.Print("fasty fall");
-			y_vel = -jump_power;
+			velocity.y = -jump_power;
 		}
-	}
-	
-	private void _on_Player_Died()
-	{
-		Transform respawn = this.GlobalTransform;
-		respawn.origin.y = 30;
-		this.GlobalTransform = respawn;
-		Death.Play();
 	}
 	
 	public override void _UnhandledInput(InputEvent @event) {
 		if (Input.IsActionJustPressed("jump") && IsOnFloor()) 
 		{
-			y_vel = jump_power;
+			velocity.y += jump_power;
 			Jump.Play();	
 		}
 		
 		if (Input.IsActionJustPressed("down") && !IsOnFloor())
 		{
-			y_vel = -jump_power;
+			velocity.y += -jump_power;
 		}
 		
 		if (Input.IsActionJustPressed("left")) 
@@ -107,6 +96,14 @@ public class Player : KinematicBody
 			wanted_lane = Mathf.Clamp(wanted_lane, 0, lanes.Count - 1);
 		}
 		
+	}
+
+	private void _on_Player_Died()
+	{
+		Transform respawn = this.GlobalTransform;
+		respawn.origin.y = 30;
+		this.GlobalTransform = respawn;
+		Death.Play();
 	}
 	
 	public override void _PhysicsProcess(float delta) 
@@ -156,13 +153,8 @@ public class Player : KinematicBody
 			Death.Play();
 			st.EmitSignal("PlayerDied");
 		}
-		
-		if (IsOnFloor())
-			velocity.y = 0f;
-		else
-			y_vel = Mathf.Clamp(y_vel-gravity, -max_terminal_velocity, jump_power);
-			
-		velocity.y = y_vel;
-		MoveAndSlide(velocity, Vector3.Up, false, 4, 1.5605f, false);
+
+		velocity.y = Mathf.Clamp(velocity.y-gravity, -max_terminal_velocity, jump_power);
+		velocity = MoveAndSlide(velocity, Vector3.Up, false, 4, 1.5605f, false);
 	}
 }

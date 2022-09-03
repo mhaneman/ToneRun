@@ -3,16 +3,13 @@ using System;
 
 using System.Collections.Generic;
 
-public class PoolQueue<T, U> : Node where T : Spatial where U : Spatial
+public class PoolQueue<T> : Node where T : StaticBody
 {
 	/* seperate the object pool out... eventually */
-	public LinkedList<T> Train = new LinkedList<T>();
-	private List<PooledObject<T>> cars = new List<PooledObject<T>>();
-	
-	public LinkedList<U> Riders = new LinkedList<U>();
-	private List<PooledObject<U>> breeds = new List<PooledObject<U>>();
-	
+	private T[] Head = new T[3];
+	private List<PooledObject<T>> ObjTypes = new List<PooledObject<T>>();
 	private Spatial Other;
+	private Vector3 Speed = Vector3.Back * 50f;
 	
 	public PoolQueue(){}
 	
@@ -21,78 +18,55 @@ public class PoolQueue<T, U> : Node where T : Spatial where U : Spatial
 		this.Other = Other;
 	}
 	
-	public void AddCar(string ScenePath, int InitCount=1)
+	public void AddObjType(string ScenePath, int InitCount=1)
 	{
-		cars.Add(new PooledObject<T>(Other, ScenePath, InitCount));
+		ObjTypes.Add(new PooledObject<T>(Other, ScenePath, InitCount));
 	}
-	
-	public void AddBreed(string ScenePath, int InitCount=1)
+
+	public void InitalizePlatforms((int ObjNum, Vector3 Scale, float offset)[] Platforms)
 	{
-		breeds.Add(new PooledObject<U>(Other, ScenePath, InitCount));
-	}
-	
-	public void EnqueueRiders(int obj_num)
-	{
-		if (Train == null || Train.Count == 0)
-			GD.Print("Uninitalized child");
-		else
+		for(int n=0; n<Platforms.Length; n++)
 		{
-			Vector3 front = Train.Last.Value.GetNode<Spatial>("FruitRegion/front").GlobalTransform.origin;
-			Vector3 back = Train.Last.Value.GetNode<Spatial>("FruitRegion/back").GlobalTransform.origin;
-			front.y += 1;
-			while(front.z >= back.z)
-			{
-				Transform spawnLoc = new Transform(Vector3.Left, Vector3.Up, Vector3.Forward, front);
-				Riders.AddLast(breeds[obj_num].Summon(spawnLoc));
-				front.z -= 6;
-			}
+			Transform trans = Transform.Identity;
+			trans.origin.x = Platforms[n].offset;
+			Head[n] = ObjTypes[Platforms[n].ObjNum].Summon(trans, Platforms[n].Scale);
 		}
 	}
 	
-	public void Enqueue(int obj_num, Vector3 scale)
+	
+	public void Enqueue((int ObjNum, Vector3 Scale)[] Platform)
 	{
-		Transform spawnLoc;
-		spawnLoc = Other.GlobalTransform;
-		if (Train != null && Train.Count > 0)
-			spawnLoc.origin.z = 
-				Train.Last.Value.GetNode<Spatial>("end").GlobalTransform.origin.z;	
-		Train.AddLast(cars[obj_num].Summon(spawnLoc, scale));
+		T[] NewHead = new T[3];
+		for (int n=0; n<Platform.Length; n++)
+		{
+			Transform SpawnLoc = Head[n].GetNode<Spatial>("end").GlobalTransform;
+			NewHead[n] = ObjTypes[Platform[n].ObjNum].Summon(SpawnLoc, Platform[n].Scale);
+		}
+		Head = NewHead;
 	}
 	
-	public void Dequeue(StaticBody body)
+	public void Dequeue(T body)
 	{
-		foreach(var i in cars)
+		foreach(var i in ObjTypes)
 		{
 			if (body.Filename == i.ScenePath)
 			{
 				i.Dismiss();
-				Train.RemoveFirst();
 				return;
 			}
 		}
 	}
-	
-	public void Dequeue(Area body)
+
+	public void MoveObjects(float Speed, float delta)
 	{
-		foreach(var j in breeds)
+		foreach(var i in ObjTypes)
 		{
-			if (body.Filename == j.ScenePath)
+			foreach(var j in i.working)
 			{
-				j.Dismiss();
-				Riders.RemoveFirst();
-				return;
+				Transform trans = j.GlobalTransform;
+				trans.origin.z += Speed * delta;
+				j.GlobalTransform = trans;
 			}
 		}
-	}
-	
-	public void Clear()
-	{
-		foreach(var obj in cars) 
-			obj.Clear();
-		Train.Clear();
-		
-		foreach(var obj in breeds)
-			obj.Clear();
-		Riders.Clear();
 	}
 }

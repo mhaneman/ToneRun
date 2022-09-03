@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://scenes/Items/Fruits.cs" type="Script" id=1]
+[ext_resource path="res://scripts/Fruits.cs" type="Script" id=1]
 [ext_resource path="res://assets/sounds/gumgum_eaten.wav" type="AudioStream" id=2]
 
 [sub_resource type="CapsuleMesh" id=2]

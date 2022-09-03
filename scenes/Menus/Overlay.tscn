@@ -1,9 +1,9 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://scenes/World/FPS.cs" type="Script" id=1]
-[ext_resource path="res://scenes/Items/Fruits.cs" type="Script" id=2]
+[ext_resource path="res://scripts/FPS.cs" type="Script" id=1]
+[ext_resource path="res://scripts/Fruits.cs" type="Script" id=2]
 [ext_resource path="res://assets/fonts/BebasNeue-Regular.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://scenes/Menus/Score.cs" type="Script" id=4]
+[ext_resource path="res://scripts/Score.cs" type="Script" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32

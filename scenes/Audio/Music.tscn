@@ -1,0 +1,42 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://assets/sounds/music/purple.wav" type="AudioStream" id=1]
+[ext_resource path="res://assets/sounds/music/orange.wav" type="AudioStream" id=2]
+[ext_resource path="res://assets/sounds/music/blue.wav" type="AudioStream" id=3]
+[ext_resource path="res://assets/sounds/music/yellow.wav" type="AudioStream" id=4]
+[ext_resource path="res://assets/sounds/music/green.wav" type="AudioStream" id=5]
+[ext_resource path="res://assets/sounds/music/red.wav" type="AudioStream" id=6]
+[ext_resource path="res://scenes/Audio/Music.cs" type="Script" id=7]
+[ext_resource path="res://assets/sounds/music/black.wav" type="AudioStream" id=8]
+
+[node name="Music" type="Node"]
+script = ExtResource( 7 )
+
+[node name="Red" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+stream = ExtResource( 6 )
+pitch_scale = 1.02
+
+[node name="Orange" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+pitch_scale = 1.02
+
+[node name="Yellow" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+pitch_scale = 1.02
+
+[node name="Green" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+pitch_scale = 1.02
+
+[node name="Blue" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+pitch_scale = 1.02
+
+[node name="Purple" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 1 )
+pitch_scale = 1.02
+
+[node name="Black" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+volume_db = -6.0

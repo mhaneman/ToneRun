@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scenes/Treadmill/Treadmill.cs" type="Script" id=1]
+[ext_resource path="res://scenes/Treadmill/Belt.tscn" type="PackedScene" id=2]
+
+[node name="Treadmill" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="BeltLeft" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0 )
+
+[node name="BeltMiddle" parent="." instance=ExtResource( 2 )]
+
+[node name="BeltRight" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0 )

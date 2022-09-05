@@ -5,10 +5,9 @@ using System.Collections.Generic;
 
 public class PoolQueue<T> : Node where T : StaticBody
 {
-	/* seperate the object pool out... eventually */
 	private int NumOfLanes;
 	public T[] Head;
-	private List<PooledObject<T>> ObjTypes = new List<PooledObject<T>>();
+	private Dictionary<string, PooledObject<T>> ObjTypes = new Dictionary<string, PooledObject<T>>();
 	private Spatial Other;
 	
 	public PoolQueue(){}
@@ -20,36 +19,36 @@ public class PoolQueue<T> : Node where T : StaticBody
 		Head = new T[NumOfLanes];
 	}
 	
-	public void AddObjType(string ScenePath, int InitCount=1)
+	public void AddObjType(string Name, string ScenePath, int InitCount=1)
 	{
-		ObjTypes.Add(new PooledObject<T>(Other, ScenePath, InitCount));
+		ObjTypes.Add(Name, new PooledObject<T>(Other, ScenePath, InitCount));
 	}
 
-	public void InitalizePlatforms((int ObjNum, Vector3 Scale, float offset)[] Platforms)
+	public void InitalizePlatforms((string ObjName, Vector3 Scale, float offset)[] Platforms)
 	{
 		for(int n=0; n<Platforms.Length; n++)
 		{
 			Transform trans = Transform.Identity;
 			trans.origin.x = Platforms[n].offset;
-			Head[n] = ObjTypes[Platforms[n].ObjNum].Summon(trans, Platforms[n].Scale);
+			Head[n] = ObjTypes[Platforms[n].ObjName].Summon(trans, Platforms[n].Scale);
 		}
 	}
 	
 	
-	public void Enqueue((int ObjNum, Vector3 Scale)[] Platform)
+	public void Enqueue((string ObjName, Vector3 Scale)[] Platform)
 	{
 		T[] NewHead = new T[NumOfLanes];
 		for (int n=0; n<Platform.Length; n++)
 		{
 			Transform SpawnLoc = Head[n].GetNode<Spatial>("Back").GlobalTransform;
-			NewHead[n] = ObjTypes[Platform[n].ObjNum].Summon(SpawnLoc, Platform[n].Scale);
+			NewHead[n] = ObjTypes[Platform[n].ObjName].Summon(SpawnLoc, Platform[n].Scale);
 		}
 		Head = NewHead;
 	}
 	
 	public void Dequeue(T body)
 	{
-		foreach(var i in ObjTypes)
+		foreach(var i in ObjTypes.Values)
 		{
 			if (body.Filename == i.ScenePath)
 			{
@@ -66,7 +65,7 @@ public class PoolQueue<T> : Node where T : StaticBody
 
 	public void MoveObjects(float Speed, float delta)
 	{
-		foreach(var i in ObjTypes)
+		foreach(var i in ObjTypes.Values)
 		{
 			foreach(var j in i.working)
 			{

@@ -10,15 +10,16 @@ public class Singleton : Node
 	
 	public int current_color;
 	public int NumOfLanes = 3;
-	public float PlatformSpacing = 4f;
-	public float MaxPlatformWidth = 1f;
-	public float speed;
+	public float PlatformSpacing = 8f;
+	public float MaxPlatformWidth = 2f;
+	public float InitalSpeed = 30f;
+	public float MaxSpeed = 70f;
+	public float SpeedInc = 0.005f;
 	public int fruits = 0;
 	
 	public override void _Ready()
 	{
 		current_color = rand.Next(0, 6);
-		speed = 50f;
 	}
 }
 

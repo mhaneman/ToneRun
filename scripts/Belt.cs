@@ -7,7 +7,9 @@ public class Belt : Spatial
 	
 	public PoolQueue<StaticBody> platformQueue;
 	public ulong distance {get; set;} = 0;
-	private float Speed = 40f;
+	private float Speed;
+	private float MaxSpeed;
+	private float SpeedInc;
 	private int NumOfLanes;
 	private float PlatformSpacing;
 	private float MaxPlatformWidth;
@@ -23,6 +25,9 @@ public class Belt : Spatial
 		this.NumOfLanes = st.NumOfLanes;
 		this.PlatformSpacing = st.PlatformSpacing;
 		this.MaxPlatformWidth = st.MaxPlatformWidth;
+		this.Speed = st.InitalSpeed;
+		this.MaxSpeed = st.MaxSpeed;
+		this.SpeedInc = st.SpeedInc;
 		
 		Despawn = GetNode<Area>("Despawn");
 		Despawn.Connect("body_exited", this, "on_DespawnPlatformArea");
@@ -33,11 +38,11 @@ public class Belt : Spatial
 		platformQueue = new PoolQueue<StaticBody>(this, NumOfLanes);
 		
 		// platforms
-		platformQueue.AddObjType("res://scenes/Platforms/Stair.tscn", 15);
-		platformQueue.AddObjType("res://scenes/Platforms/Down.tscn", 15);
-		platformQueue.AddObjType("res://scenes/Platforms/Flat.tscn", 15);
-		platformQueue.AddObjType("res://scenes/Platforms/Up.tscn", 15);
-		platformQueue.AddObjType("res://scenes/Platforms/Gap.tscn", 15);
+		platformQueue.AddObjType("stair", "res://scenes/Platforms/Stair.tscn", 15);
+		platformQueue.AddObjType("down", "res://scenes/Platforms/Down.tscn", 15);
+		platformQueue.AddObjType("flat", "res://scenes/Platforms/Flat.tscn", 15);
+		platformQueue.AddObjType("up", "res://scenes/Platforms/Up.tscn", 15);
+		platformQueue.AddObjType("gap", "res://scenes/Platforms/Gap.tscn", 15);
 	}
 	
 	public override void _PhysicsProcess(float delta) 
@@ -47,24 +52,25 @@ public class Belt : Spatial
 
 		platformQueue.MoveObjects(Speed, delta);
 		distance++;
+		if (Speed < MaxSpeed)
+			Speed += SpeedInc;
 	}
 
 	private void InitalizeLanes()
 	{
-		int type = 2;
 		Vector3 scale = new Vector3(MaxPlatformWidth, 1f, 10f);
-		(int, Vector3, float)[] InitalPlatforms = new (int, Vector3, float)[NumOfLanes];
+		(string, Vector3, float)[] InitalPlatforms = new (string, Vector3, float)[NumOfLanes];
 		for (int n=0; n<NumOfLanes; n++)
 		{
 			int placement = n - (NumOfLanes / 2);
-			InitalPlatforms[n] = (type, scale, placement * PlatformSpacing);
+			InitalPlatforms[n] = ("flat", scale, placement * PlatformSpacing);
 		}
 		platformQueue.InitalizePlatforms(InitalPlatforms);
 	}
 	
 	private void SummonPlatformRow()
 	{
-		(int, Vector3)[] Platforms = new (int, Vector3)[NumOfLanes];
+		(string, Vector3)[] Platforms = new (string, Vector3)[NumOfLanes];
 		float[] Heights = new float[NumOfLanes];
 		for(int n=0; n<NumOfLanes; n++)
 			Heights[n] = platformQueue.GetHeight(n);
@@ -72,39 +78,37 @@ public class Belt : Spatial
 	
 		for (int n=0; n<NumOfLanes; n++)
 		{
-			int type = RandomPlatformType(Heights[n], n);
+			string type = RandomPlatformType(Heights[n], n);
 			Platforms[n] = (type, new Vector3(MaxPlatformWidth, 1f, 2f) * RandomWidth());
 		}
 		
 		platformQueue.Enqueue(Platforms);
 	}
 
-	private int RandomPlatformType(float Height, int n)
+	private string RandomPlatformType(float Height, int n)
 	{
 		//stairs can only connect to flats
-		int type;
+		string prev_type = platformQueue.Head[n].Filename;
 		if (Height <= 0f)
-			type = 0;
-		else if (Height >= 15f)
-			type = 1;
-		else if (platformQueue.Head[n].Filename == "res://scenes/Platforms/Stair.tscn" || 
-			platformQueue.Head[n].Filename == "res://scenes/Platforms/Down.tscn" ||
-			platformQueue.Head[n].Filename == "res://scenes/Platforms/Gap.tscn")
-		{
-			type = 2;
-		}
-		else
-		{
-			float w1 = (float) rand.NextDouble();
-			if (w1 < 0.1)
-				type = rand.Next(2) == 0 ? 0 : 3;
-			else if (w1 < 0.2)
-				type = 1;
-			else
-				type = rand.Next(2) == 0 ? 2 : 4;
-		}
-
-		return type;
+			return "stair";
+		else if (Height >= 25f)
+			return "down";
+		else if (prev_type == "res://scenes/Platforms/Stair.tscn" || prev_type == "res://scenes/Platforms/Down.tscn")
+			return "flat";
+		else if (prev_type == "res://scenes/Platforms/Flat.tscn" && rand.Next(2) != 0)
+			return "flat";
+		else if (prev_type == "res://scenes/Platforms/Gap.tscn" && rand.Next(3) != 0)
+			return "gap";
+		else if (rand.Next(2) != 0)
+			return "stair";
+		else if (rand.Next(4) != 0)
+			return "down";
+		else if (rand.Next(4) != 0)
+			return "up";
+		else if (rand.Next(2) != 0)
+			return "gap";
+		
+		return "flat";
 	}
 
 	private Vector3 RandomWidth()

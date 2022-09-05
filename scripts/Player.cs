@@ -13,10 +13,9 @@ public class Player : KinematicBody
 	
 	private Vector3 velocity;
 	
-	private Godot.Collections.Array<Spatial> lanes = new Godot.Collections.Array<Spatial>();
-	
 	private int current_lane;
 	private int wanted_lane;
+	private float PlatformSpacing;
 	
 	AudioStreamPlayer Switch;
 	AudioStreamPlayer Jump;
@@ -29,6 +28,7 @@ public class Player : KinematicBody
 		/* signals */
 		st = GetNode<Singleton>("/root/Singleton");
 		st.Connect("PlayerDied", this, "_on_Player_Died");
+		this.PlatformSpacing = st.PlatformSpacing;
 		
 		/* audio */
 		Death = GetNode<AudioStreamPlayer>("Death");
@@ -38,10 +38,8 @@ public class Player : KinematicBody
 		camera_pivot = GetNode<Spatial>("CameraPivot");
 		camera = GetNode<Camera>("CameraPivot/CameraBoom/Camera");
 		
-		lanes.Add(GetNode<Spatial>("/root/Main/Treadmill/BeltMiddle"));
 		
-		current_lane = lanes.Count / 2;
-		wanted_lane = lanes.Count / 2;
+		current_lane = wanted_lane = 0;
 	}
 	
 	// touch screen controls
@@ -50,13 +48,11 @@ public class Player : KinematicBody
 		if (direction == "left") 
 		{
 			wanted_lane -= 1;
-			wanted_lane = Mathf.Clamp(wanted_lane, 0, lanes.Count - 1);
 		}
 		
 		if (direction == "right") 
 		{
 			wanted_lane += 1;
-			wanted_lane = Mathf.Clamp(wanted_lane, 0, lanes.Count - 1);
 		}
 		
 		if (direction == "jump" && IsOnFloor())
@@ -87,13 +83,11 @@ public class Player : KinematicBody
 		if (Input.IsActionJustPressed("left")) 
 		{
 			wanted_lane -= 1;
-			wanted_lane = Mathf.Clamp(wanted_lane, 0, lanes.Count - 1);
 		}
 		
 		if (Input.IsActionJustPressed("right")) 
 		{
 			wanted_lane += 1;
-			wanted_lane = Mathf.Clamp(wanted_lane, 0, lanes.Count - 1);
 		}
 		
 	}
@@ -101,7 +95,7 @@ public class Player : KinematicBody
 	private void _on_Player_Died()
 	{
 		Transform respawn = this.GlobalTransform;
-		respawn.origin.y = 30;
+		respawn.origin.y = 60;
 		this.GlobalTransform = respawn;
 		Death.Play();
 	}
@@ -132,7 +126,7 @@ public class Player : KinematicBody
 		else
 			return;
 		
-		float wanted_x = lanes[wanted_lane].GlobalTransform.origin.x;
+		float wanted_x = wanted_lane * PlatformSpacing;
 		float current_x = GlobalTransform.origin.x;
 		float diff_x = Mathf.Abs(current_x - wanted_x);
 		Transform t = this.Transform;

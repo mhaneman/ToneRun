@@ -2,7 +2,7 @@
 
 [ext_resource path="res://scenes/Controls/SwipeDetector.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Characters/Player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/Treadmill/Treadmill.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/Treadmill/Belt.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scripts/World.cs" type="Script" id=4]
 [ext_resource path="res://scripts/FruitsCollected.cs" type="Script" id=5]
 [ext_resource path="res://scenes/Audio/Music.tscn" type="PackedScene" id=6]
@@ -45,8 +45,6 @@ shape = SubResource( 2 )
 
 [node name="Music" parent="." instance=ExtResource( 6 )]
 
-[node name="Treadmill" parent="." instance=ExtResource( 3 )]
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="FruitsCollected" type="Label" parent="CanvasLayer"]
@@ -64,6 +62,8 @@ __meta__ = {
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 5 )
+
+[node name="Belt" parent="." instance=ExtResource( 3 )]
 
 [connection signal="Swiped" from="SwipeDetector" to="Player" method="_on_SwipeDetector_Swiped"]
 [connection signal="body_entered" from="DeathBound" to="." method="_on_DeathBound_body_entered"]

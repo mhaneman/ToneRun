@@ -8,7 +8,9 @@ public class Belt : Spatial
 	public PoolQueue<StaticBody> platformQueue;
 	public ulong distance {get; set;} = 0;
 	private float Speed = 40f;
-	private int NumOfLanes = 3;
+	private int NumOfLanes;
+	private float PlatformSpacing;
+	private float MaxPlatformWidth;
 	
 	Area Despawn;
 	Area Spawn;
@@ -18,6 +20,9 @@ public class Belt : Spatial
 	{	
 		st = GetNode<Singleton>("/root/Singleton");
 		st.Connect("PlayerDied", this, "on_PlayerDied");
+		this.NumOfLanes = st.NumOfLanes;
+		this.PlatformSpacing = st.PlatformSpacing;
+		this.MaxPlatformWidth = st.MaxPlatformWidth;
 		
 		Despawn = GetNode<Area>("Despawn");
 		Despawn.Connect("body_exited", this, "on_DespawnPlatformArea");
@@ -32,6 +37,7 @@ public class Belt : Spatial
 		platformQueue.AddObjType("res://scenes/Platforms/Down.tscn", 15);
 		platformQueue.AddObjType("res://scenes/Platforms/Flat.tscn", 15);
 		platformQueue.AddObjType("res://scenes/Platforms/Up.tscn", 15);
+		platformQueue.AddObjType("res://scenes/Platforms/Gap.tscn", 15);
 	}
 	
 	public override void _PhysicsProcess(float delta) 
@@ -46,13 +52,12 @@ public class Belt : Spatial
 	private void InitalizeLanes()
 	{
 		int type = 2;
-		Vector3 scale = new Vector3(2f, 1f, 10f);
-		float spacing = 8f;
+		Vector3 scale = new Vector3(MaxPlatformWidth, 1f, 10f);
 		(int, Vector3, float)[] InitalPlatforms = new (int, Vector3, float)[NumOfLanes];
 		for (int n=0; n<NumOfLanes; n++)
 		{
 			int placement = n - (NumOfLanes / 2);
-			InitalPlatforms[n] = (type, scale, placement * spacing);
+			InitalPlatforms[n] = (type, scale, placement * PlatformSpacing);
 		}
 		platformQueue.InitalizePlatforms(InitalPlatforms);
 	}
@@ -67,20 +72,27 @@ public class Belt : Spatial
 	
 		for (int n=0; n<NumOfLanes; n++)
 		{
-			int type = RandomPlatformType(Heights[n]);
-			Platforms[n] = (type, new Vector3(2f, 1f, 2f) * RandomWidth());
+			int type = RandomPlatformType(Heights[n], n);
+			Platforms[n] = (type, new Vector3(MaxPlatformWidth, 1f, 2f) * RandomWidth());
 		}
 		
 		platformQueue.Enqueue(Platforms);
 	}
 
-	private int RandomPlatformType(float Height)
+	private int RandomPlatformType(float Height, int n)
 	{
+		//stairs can only connect to flats
 		int type;
 		if (Height <= 0f)
 			type = 0;
 		else if (Height >= 15f)
 			type = 1;
+		else if (platformQueue.Head[n].Filename == "res://scenes/Platforms/Stair.tscn" || 
+			platformQueue.Head[n].Filename == "res://scenes/Platforms/Down.tscn" ||
+			platformQueue.Head[n].Filename == "res://scenes/Platforms/Gap.tscn")
+		{
+			type = 2;
+		}
 		else
 		{
 			float w1 = (float) rand.NextDouble();
@@ -89,7 +101,7 @@ public class Belt : Spatial
 			else if (w1 < 0.2)
 				type = 1;
 			else
-				type = 2;
+				type = rand.Next(2) == 0 ? 2 : 4;
 		}
 
 		return type;

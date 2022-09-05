@@ -94,9 +94,6 @@ public class PooledObject<T> where T : StaticBody
 		t.GlobalTransform = discardLoc;
 		t.Visible = false;
 		retired.Push(t);
-
-		GD.Print("working: ", working.Count, " retired: ", 
-			retired.Count, " ", ScenePath);
 	}
 	
 	public void Clear()

@@ -7,10 +7,9 @@ public class PoolQueue<T> : Node where T : StaticBody
 {
 	/* seperate the object pool out... eventually */
 	private int NumOfLanes;
-	private T[] Head;
+	public T[] Head;
 	private List<PooledObject<T>> ObjTypes = new List<PooledObject<T>>();
 	private Spatial Other;
-	private Vector3 Speed = Vector3.Back * 50f;
 	
 	public PoolQueue(){}
 	

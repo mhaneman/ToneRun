@@ -9,6 +9,9 @@ public class Singleton : Node
 	Random rand = new Random();
 	
 	public int current_color;
+	public int NumOfLanes = 3;
+	public float PlatformSpacing = 4f;
+	public float MaxPlatformWidth = 1f;
 	public float speed;
 	public int fruits = 0;
 	

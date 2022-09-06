@@ -4,7 +4,7 @@ using System;
 public class Player : KinematicBody
 {
 	private float gravity = 1.3f;
-	private float jump_power = 35f;
+	private float jump_power = 40f;
 	private float max_terminal_velocity = 200f;
 	
 	private Spatial camera_pivot;
@@ -22,7 +22,7 @@ public class Player : KinematicBody
 		
 		/* signals */
 		st = GetNode<Singleton>("/root/Singleton");
-		st.Connect("PlayerDied", this, "_on_Player_Died");
+		st.Connect("PlayerDied", this, "on_PlayerDied");
 		
 		/* audio */
 		Death = GetNode<AudioStreamPlayer>("Death");
@@ -68,7 +68,7 @@ public class Player : KinematicBody
 		}
 	}
 
-	private void _on_Player_Died()
+	private void on_PlayerDied()
 	{
 		Transform respawn = this.GlobalTransform;
 		respawn.origin.y = 60;

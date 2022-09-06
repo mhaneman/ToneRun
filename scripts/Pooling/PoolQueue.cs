@@ -3,7 +3,7 @@ using System;
 
 using System.Collections.Generic;
 
-public class PoolQueue<T> : Node where T : StaticBody
+public class PoolQueue<T> : Node where T : Spatial
 {
 	private int NumOfLanes;
 	public T[] Head;

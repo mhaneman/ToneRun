@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/Player.cs" type="Script" id=1]
-[ext_resource path="res://scenes/Characters/Chicken.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/characters/chicken.glb" type="PackedScene" id=2]
 [ext_resource path="res://assets/sounds/gumgum_jump.wav" type="AudioStream" id=3]
 [ext_resource path="res://assets/sounds/gumgum_switch.wav" type="AudioStream" id=4]
 [ext_resource path="res://assets/sounds/gumgum_death.wav" type="AudioStream" id=5]
@@ -35,7 +35,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.501036, -0.140571 )
 far = 200.0
 
 [node name="chicken" parent="." instance=ExtResource( 2 )]
-transform = Transform( -0.5, 0, -7.54979e-08, 0, 0.5, 0, 7.54979e-08, 0, -0.5, 0, -0.670055, 0 )
+transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.376582, 0 )
 
 [node name="Death" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 5 )

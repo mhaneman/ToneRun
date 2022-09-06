@@ -3,7 +3,7 @@ using System;
 
 public class Fruits : Area
 {
-	float rot_speed = 4f;
+	float rot_speed = 2f;
 	int store_current_color;
 	
 	AudioStreamPlayer collected;
@@ -11,12 +11,12 @@ public class Fruits : Area
 	public override void _Ready() 
 	{
 		st = GetNode<Singleton>("/root/Singleton");
-		st.Connect("ChangeColor", this, "_on_Changed_Color");
+		st.Connect("ChangeColor", this, "on_ChangeColor");
 		
 		collected = GetNode<AudioStreamPlayer>("Collected");
 		
 		store_current_color = (int) st.current_color;
-		MeshInstance current_fruit = (MeshInstance) this.GetChild(store_current_color);
+		Spatial current_fruit = (Spatial) this.GetChild(store_current_color);
 		current_fruit.Visible = true;
 	}
 	
@@ -25,10 +25,10 @@ public class Fruits : Area
 		this.RotateY(rot_speed * delta);
 	}
 	
-	private void _on_Changed_Color()
+	private void on_ChangeColor()
 	{
-		MeshInstance store_fruit = (MeshInstance) this.GetChild(store_current_color);
-		MeshInstance wanted_fruit = (MeshInstance) this.GetChild((int) st.current_color);
+		Spatial store_fruit = (Spatial) this.GetChild(store_current_color);
+		Spatial wanted_fruit = (Spatial) this.GetChild((int) st.current_color);
 		store_fruit.Visible = false;
 		wanted_fruit.Visible = true;
 		store_current_color = (int) st.current_color;

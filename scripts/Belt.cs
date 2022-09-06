@@ -6,6 +6,7 @@ public class Belt : Spatial
 	Random rand = new Random();
 	
 	public PoolQueue<StaticBody> platformQueue;
+	public PooledObject<Area> fruitQueue;
 	public ulong distance {get; set;} = 0;
 	private float Speed;
 	private float MaxSpeed;
@@ -13,6 +14,8 @@ public class Belt : Spatial
 	private int NumOfLanes;
 	private float PlatformSpacing;
 	private float MaxPlatformWidth;
+
+	private float FruitSpacing;
 	
 	Area Despawn;
 	Area Spawn;
@@ -28,14 +31,18 @@ public class Belt : Spatial
 		this.Speed = st.InitalSpeed;
 		this.MaxSpeed = st.MaxSpeed;
 		this.SpeedInc = st.SpeedInc;
+		this.FruitSpacing = st.FruitSpacing;
 		
 		Despawn = GetNode<Area>("Despawn");
 		Despawn.Connect("body_exited", this, "on_DespawnPlatformArea");
+		Despawn.Connect("area_exited", this, "on_DespawnFruitArea");
 		
 		Spawn = GetNode<Area>("Spawn");
 		Spawn.Connect("LowSpawn", this, "on_SpawnNewPlatformsArea");
 		
+
 		platformQueue = new PoolQueue<StaticBody>(this, NumOfLanes);
+		fruitQueue = new PooledObject<Area>(this, "res://scenes/Items/Fruits.tscn", 100);
 		
 		// platforms
 		platformQueue.AddObjType("stair", "res://scenes/Platforms/Stair.tscn", 15);
@@ -51,9 +58,36 @@ public class Belt : Spatial
 			InitalizeLanes();
 
 		platformQueue.MoveObjects(Speed, delta);
+
+		foreach(var n in fruitQueue.working)
+		{
+			Transform trans = n.GlobalTransform;
+			trans.origin.z += Speed * delta;
+			n.GlobalTransform = trans;
+		}
+
 		distance++;
 		if (Speed < MaxSpeed)
 			Speed += SpeedInc;
+	}
+
+	private void SummonFruitsOnPlatform(Transform start, Transform end)
+	{
+		Transform placement = Transform.Identity;
+		placement.origin = start.origin;
+		placement.origin.y += 2;
+
+		fruitQueue.Summon(placement);
+	}
+
+	private void SummonFruitRow()
+	{
+		var Head = platformQueue.Head;
+		for(int n=0; n<Head.Length; n++)
+		{
+			if (Head[n].Filename == "res://scenes/Platforms/Flat.tscn" && rand.Next(4) == 0)
+				SummonFruitsOnPlatform(Head[n].GlobalTransform, Head[n].GetNode<Spatial>("Back").GlobalTransform);
+		}
 	}
 
 	private void InitalizeLanes()
@@ -72,6 +106,7 @@ public class Belt : Spatial
 	{
 		(string, Vector3)[] Platforms = new (string, Vector3)[NumOfLanes];
 		float[] Heights = new float[NumOfLanes];
+
 		for(int n=0; n<NumOfLanes; n++)
 			Heights[n] = platformQueue.GetHeight(n);
 		
@@ -128,11 +163,19 @@ public class Belt : Spatial
 	{
 		platformQueue.Dequeue((StaticBody) body);
 	}
+
+	private void on_DespawnFruitArea(object body)
+	{
+		fruitQueue.Dismiss();
+	}
 	
 	private void on_SpawnNewPlatformsArea()
 	{
 		if (distance > 0)
+		{
 			SummonPlatformRow();
+			SummonFruitRow();
+		}
 	}
 	
 	private void on_PlayerDied()

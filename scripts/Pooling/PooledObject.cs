@@ -3,7 +3,7 @@ using System;
 
 using System.Collections.Generic;
 
-public class PooledObject<T> where T : StaticBody
+public class PooledObject<T> where T : Spatial
 {
 	private Transform discardLoc = new Transform();
 	public LinkedList<T> working = new LinkedList<T>(); // eventually make double linked list

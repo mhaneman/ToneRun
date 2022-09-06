@@ -1,79 +1,52 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scripts/Fruits.cs" type="Script" id=1]
 [ext_resource path="res://assets/sounds/gumgum_eaten.wav" type="AudioStream" id=2]
+[ext_resource path="res://assets/fruits/strawberry.glb" type="PackedScene" id=3]
+[ext_resource path="res://assets/fruits/orange.glb" type="PackedScene" id=4]
+[ext_resource path="res://assets/fruits/eggplant.glb" type="PackedScene" id=5]
+[ext_resource path="res://assets/fruits/pear.glb" type="PackedScene" id=6]
+[ext_resource path="res://assets/fruits/banana.glb" type="PackedScene" id=7]
+[ext_resource path="res://assets/fruits/setmefree.glb" type="PackedScene" id=8]
+[ext_resource path="res://assets/fruits/blueberry.glb" type="PackedScene" id=9]
 
-[sub_resource type="CapsuleMesh" id=2]
-
-[sub_resource type="CubeMesh" id=3]
-
-[sub_resource type="CapsuleMesh" id=5]
-
-[sub_resource type="PrismMesh" id=6]
-
-[sub_resource type="SphereMesh" id=7]
-
-[sub_resource type="SphereMesh" id=4]
-
-[sub_resource type="PrismMesh" id=8]
-
-[sub_resource type="SpatialMaterial" id=9]
-albedo_color = Color( 0.298039, 0.917647, 0.52549, 1 )
-
-[sub_resource type="CapsuleShape" id=1]
-radius = 0.482006
-height = 0.452308
+[sub_resource type="CapsuleShape" id=18]
 
 [node name="Fruit" type="Area"]
+transform = Transform( 0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0 )
 collision_layer = 8
 collision_mask = 17
 script = ExtResource( 1 )
 
-[node name="Apple" type="MeshInstance" parent="."]
-transform = Transform( 0.5, 0, 0, 0, -2.18557e-08, -0.5, 0, 0.5, -2.18557e-08, 0, 0, 0 )
+[node name="strawberry" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.812709, 0 )
 visible = false
-mesh = SubResource( 2 )
-material/0 = null
 
-[node name="Orange" type="MeshInstance" parent="."]
-transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
+[node name="orange" parent="." instance=ExtResource( 4 )]
 visible = false
-mesh = SubResource( 3 )
-material/0 = null
 
-[node name="Banana" type="MeshInstance" parent="."]
-transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
+[node name="banana" parent="." instance=ExtResource( 7 )]
+transform = Transform( 0.725046, 0.338095, 0, -0.338095, 0.725046, 0, 0, 0, 0.8, -0.24843, -0.502962, 0 )
 visible = false
-mesh = SubResource( 5 )
-material/0 = null
 
-[node name="Pear" type="MeshInstance" parent="."]
-transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
+[node name="pear" parent="." instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.07778, 0 )
 visible = false
-mesh = SubResource( 6 )
-material/0 = null
 
-[node name="Blueberry" type="MeshInstance" parent="."]
-transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
+[node name="blueberry" parent="." instance=ExtResource( 9 )]
 visible = false
-mesh = SubResource( 7 )
-material/0 = null
 
-[node name="Grape" type="MeshInstance" parent="."]
-transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
+[node name="eggplant" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0162, 0 )
 visible = false
-mesh = SubResource( 4 )
-material/0 = null
 
-[node name="SetMeFree" type="MeshInstance" parent="."]
-transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
+[node name="setmefree" parent="." instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.729206, 0 )
 visible = false
-mesh = SubResource( 8 )
-material/0 = SubResource( 9 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
-shape = SubResource( 1 )
+shape = SubResource( 18 )
 
 [node name="Collected" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 2 )

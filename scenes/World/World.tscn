@@ -28,6 +28,9 @@ sun_energy = 0.0
 [sub_resource type="Environment" id=5]
 background_mode = 2
 background_sky = SubResource( 4 )
+fog_color = Color( 1, 1, 1, 1 )
+fog_depth_begin = 100.0
+fog_depth_end = 200.0
 
 [node name="Main" type="Spatial"]
 script = ExtResource( 4 )
@@ -61,9 +64,6 @@ margin_right = -60.0
 margin_bottom = 72.0
 custom_fonts/font = SubResource( 3 )
 script = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 5 )

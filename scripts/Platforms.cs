@@ -3,7 +3,6 @@ using System;
 
 public class Platforms : Spatial
 {
-    private float SwitchSpeed = 30f;
     private float NumOfLanes;
     private float PlatformSpacing;
 

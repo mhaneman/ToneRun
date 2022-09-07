@@ -27,11 +27,10 @@ public class Intro : Spatial
 
     private void on_Swiped(string direction)
     {
-        if (direction == "right")
-            Player.ApplyImpulse(new Vector3(0.1f, -0.1f, 0f), new Vector3(0f, 20f, -70f));
-
-         if (direction == "jump")
-            Player.ApplyImpulse(new Vector3(0.1f, -0.1f, 0f), new Vector3(0f, 40f, 0f));
+        if (direction == "jump")
+        {
+            Player.ApplyImpulse(new Vector3(0.1f, -0.1f, 0f), new Vector3(0f, 50f, -70f));
+        }
     }
 
     private void on_BodyEntered(object body)

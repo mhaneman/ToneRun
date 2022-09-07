@@ -16,18 +16,19 @@ extents = Vector3( 18.9275, 0.835875, 2.17621 )
 size = 32
 font_data = ExtResource( 8 )
 
-[sub_resource type="ProceduralSky" id=4]
+[sub_resource type="ProceduralSky" id=6]
 sky_top_color = Color( 1, 1, 1, 1 )
 sky_horizon_color = Color( 1, 1, 1, 1 )
 sky_curve = 0.199722
 sky_energy = 0.5
 ground_horizon_color = Color( 0.431373, 0.431373, 0.431373, 1 )
 ground_energy = 0.3
+sun_latitude = 15.0
 sun_energy = 0.0
 
 [sub_resource type="Environment" id=5]
 background_mode = 2
-background_sky = SubResource( 4 )
+background_sky = SubResource( 6 )
 fog_color = Color( 1, 1, 1, 1 )
 fog_depth_begin = 100.0
 fog_depth_end = 200.0
@@ -40,7 +41,7 @@ script = ExtResource( 4 )
 [node name="Platforms" parent="." instance=ExtResource( 3 )]
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -1 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 100, -1 )
 
 [node name="PauseMenu" parent="." instance=ExtResource( 7 )]
 

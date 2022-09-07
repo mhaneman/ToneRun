@@ -5,14 +5,18 @@ public class Platforms : Spatial
 {
     private float NumOfLanes;
     private float PlatformSpacing;
-
     private int WantedLane;
 
+
+    private Belt belt;
     private Singleton st;
+
     public override void _Ready()
     {
+        belt = GetNode<Belt>("Belt");
         st = GetNode<Singleton>("/root/Singleton");
 		st.Connect("PlayerDied", this, "on_PlayerDied");
+
 		this.NumOfLanes = st.NumOfLanes;
 		this.PlatformSpacing = st.PlatformSpacing;
         this.WantedLane = 0;
@@ -37,5 +41,10 @@ public class Platforms : Spatial
         {
             WantedLane--;
         }
+    }
+
+    private void on_PlayerDied()
+    {
+        belt.Speed = 0f;
     }
 }

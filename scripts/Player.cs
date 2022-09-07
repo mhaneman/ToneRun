@@ -15,6 +15,8 @@ public class Player : KinematicBody
 	AudioStreamPlayer Switch;
 	AudioStreamPlayer Jump;
 	AudioStreamPlayer Death;
+
+	private CharacterSkin skin;
 	
 	private Singleton st;
 	public override void _Ready()
@@ -31,6 +33,9 @@ public class Player : KinematicBody
 		
 		camera_pivot = GetNode<Spatial>("CameraPivot");
 		camera = GetNode<Camera>("CameraPivot/CameraBoom/Camera");
+
+		skin = GetNode<CharacterSkin>("chicken");
+		skin.PlayAnimation("running-loop", 3f);
 	}
 	
 	public override void _PhysicsProcess(float delta) 
@@ -63,16 +68,20 @@ public class Player : KinematicBody
 		
 		if (direction == "down" && !IsOnFloor())
 		{
-			GD.Print("fasty fall");
 			velocity.y = -jump_power;
+		}
+
+		if (direction == "left")
+		{
+		}
+
+		if (direction == "right")
+		{
 		}
 	}
 
 	private void on_PlayerDied()
 	{
-		Transform respawn = this.GlobalTransform;
-		respawn.origin.y = 60;
-		this.GlobalTransform = respawn;
 		Death.Play();
 	}
 }

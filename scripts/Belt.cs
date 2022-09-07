@@ -8,7 +8,7 @@ public class Belt : Spatial
 	public PoolQueue<StaticBody> platformQueue;
 	public PooledObject<Area> fruitQueue;
 	public ulong distance {get; set;} = 0;
-	private float Speed;
+	public float Speed;
 	private float MaxSpeed;
 	private float SpeedInc;
 	private int NumOfLanes;
@@ -24,7 +24,6 @@ public class Belt : Spatial
 	public override void _Ready() 
 	{	
 		st = GetNode<Singleton>("/root/Singleton");
-		st.Connect("PlayerDied", this, "on_PlayerDied");
 		this.NumOfLanes = st.NumOfLanes;
 		this.PlatformSpacing = st.PlatformSpacing;
 		this.MaxPlatformWidth = st.MaxPlatformWidth;
@@ -92,7 +91,7 @@ public class Belt : Spatial
 
 	private void InitalizeLanes()
 	{
-		Vector3 scale = new Vector3(MaxPlatformWidth, 1f, 10f);
+		Vector3 scale = new Vector3(MaxPlatformWidth, 1f, 20f);
 		(string, Vector3, float)[] InitalPlatforms = new (string, Vector3, float)[NumOfLanes];
 		for (int n=0; n<NumOfLanes; n++)
 		{
@@ -176,10 +175,5 @@ public class Belt : Spatial
 			SummonPlatformRow();
 			SummonFruitRow();
 		}
-	}
-	
-	private void on_PlayerDied()
-	{
-		//distance = 0;
 	}
 }

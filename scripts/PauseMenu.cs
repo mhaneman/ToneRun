@@ -30,7 +30,7 @@ public class PauseMenu : CanvasLayer
 	
 	private void _OnQuitPressed()
 	{
-		GetTree().Quit();
+		GetTree().ChangeScene("res://scenes/World/Intro.tscn");
 	}
 	
 	

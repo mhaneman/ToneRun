@@ -3,7 +3,7 @@ using System;
 
 public class Intro : Spatial
 {
-    private Node SwipeDetector;
+    private Node ThrowDetector;
     private RigidBody Player;
     private Camera camera;
     private Area area;
@@ -13,10 +13,10 @@ public class Intro : Spatial
         Player = GetNode<RigidBody>("Player");
         area = GetNode<Area>("Area");
 
-        SwipeDetector = GetNode<Node>("SwipeDetector");
-        SwipeDetector.Connect("Swiped", this, "on_Swiped");
+        ThrowDetector = GetNode<Node>("ThrowDetector");
+        ThrowDetector.Connect("Throw", this, "on_Throw");
 
-        area.Connect("body_entered", this, "on_BodyEntered");
+        area.Connect("body_exited", this, "on_BodyExited");
     }
 
     public override void _Process(float delta)
@@ -25,15 +25,14 @@ public class Intro : Spatial
         camera.LookAt(Player.GlobalTransform.origin, Vector3.Up);
     }
 
-    private void on_Swiped(string direction)
+    private void on_Throw(Vector2 direction)
     {
-        if (direction == "jump")
-        {
-            Player.ApplyImpulse(new Vector3(0.1f, -0.1f, 0f), new Vector3(0f, 50f, -70f));
-        }
+        Vector3 pos = new Vector3 (0.1f, -0.1f, 0f);
+        Vector3 impulse = new Vector3(0f, direction.y, direction.x) * 100f;
+        Player.ApplyImpulse(pos, impulse);
     }
 
-    private void on_BodyEntered(object body)
+    private void on_BodyExited(object body)
     {
         GetTree().ChangeScene("res://scenes/World/World.tscn");
     }

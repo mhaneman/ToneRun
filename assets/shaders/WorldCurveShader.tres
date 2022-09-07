@@ -26,7 +26,7 @@ void fragment() {
 
 [resource]
 shader = SubResource( 2 )
-shader_param/albedo = null
-shader_param/CURVATURE = 5.0
+shader_param/albedo = Color( 0.396078, 0.662745, 0.67451, 1 )
+shader_param/CURVATURE = 10.0
 shader_param/CURVATURE_ACTIVE = 1.0
 shader_param/CURVATURE_DISTANCE = 100.0

@@ -25,10 +25,18 @@ public class Platforms : Spatial
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
+        PlatformTransformLerp();
+    }
+
+    private void PlatformTransformLerp()
+    {
         Transform trans = this.GlobalTransform;
         trans.origin.x = Mathf.Lerp(trans.origin.x, WantedLane * PlatformSpacing, 0.2f);
         this.GlobalTransform = trans;
     }
+
+    /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    /* Signals */
 
     private void on_Swiped(string direction)
     {

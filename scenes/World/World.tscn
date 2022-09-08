@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scenes/Controls/SwipeDetector.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Characters/Player.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://scenes/Audio/Music.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/Menus/PauseMenu.tscn" type="PackedScene" id=7]
 [ext_resource path="res://assets/fonts/BebasNeue-Regular.ttf" type="DynamicFontData" id=8]
+[ext_resource path="res://resources/WorldEnvi.tres" type="Environment" id=10]
 
 [sub_resource type="BoxShape" id=2]
 extents = Vector3( 18.9275, 0.835875, 2.17621 )
@@ -15,23 +16,6 @@ extents = Vector3( 18.9275, 0.835875, 2.17621 )
 [sub_resource type="DynamicFont" id=3]
 size = 32
 font_data = ExtResource( 8 )
-
-[sub_resource type="ProceduralSky" id=6]
-sky_top_color = Color( 1, 1, 1, 1 )
-sky_horizon_color = Color( 1, 1, 1, 1 )
-sky_curve = 0.199722
-sky_energy = 0.5
-ground_horizon_color = Color( 0.431373, 0.431373, 0.431373, 1 )
-ground_energy = 0.3
-sun_latitude = 15.0
-sun_energy = 0.0
-
-[sub_resource type="Environment" id=5]
-background_mode = 2
-background_sky = SubResource( 6 )
-fog_color = Color( 1, 1, 1, 1 )
-fog_depth_begin = 100.0
-fog_depth_end = 200.0
 
 [node name="Main" type="Spatial"]
 script = ExtResource( 4 )
@@ -67,7 +51,7 @@ custom_fonts/font = SubResource( 3 )
 script = ExtResource( 5 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 5 )
+environment = ExtResource( 10 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="WorldEnvironment"]
 transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 100, 100 )

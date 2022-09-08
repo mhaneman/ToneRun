@@ -4,6 +4,7 @@ using System;
 public class World : Spatial
 {	
 	private Singleton st;
+
 	public override void _Ready()
 	{
 		st = GetNode<Singleton>("/root/Singleton");

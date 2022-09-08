@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 
 public class Music : Node
-{	List<AudioStreamPlayer> audio = new List<AudioStreamPlayer>();
-	WeightedRandom colors = new WeightedRandom(7);
+{	
+	List<AudioStreamPlayer> audio = new List<AudioStreamPlayer>();
 		
 	private Singleton st;
 	public override void _Ready()
@@ -17,20 +17,13 @@ public class Music : Node
 			i.Connect("finished", this, "on_Finished");
 			audio.Add(i);	
 		}
-		audio[st.current_color].Play();
+		audio[st.CurrentColor].Play();
 	}
 	
 	private void on_Finished()
 	{
-		ChangeColor();
-	}
-	
-	private void ChangeColor()
-	{
-		st.current_color = colors.WeightedRandomIndex();
-		colors.ShiftWeight(st.current_color, 0f);
 		st.EmitSignal("ChangeColor");
-		audio[st.current_color].Play();
+		audio[st.CurrentColor].Play();
+		
 	}
-	
 }

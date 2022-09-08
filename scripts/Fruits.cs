@@ -15,7 +15,7 @@ public class Fruits : Area
 		
 		collected = GetNode<AudioStreamPlayer>("Collected");
 		
-		store_current_color = (int) st.current_color;
+		store_current_color = (int) st.CurrentColor;
 		Spatial current_fruit = (Spatial) this.GetChild(store_current_color);
 		current_fruit.Visible = true;
 	}
@@ -28,10 +28,10 @@ public class Fruits : Area
 	private void on_ChangeColor()
 	{
 		Spatial store_fruit = (Spatial) this.GetChild(store_current_color);
-		Spatial wanted_fruit = (Spatial) this.GetChild((int) st.current_color);
+		Spatial wanted_fruit = (Spatial) this.GetChild((int) st.CurrentColor);
 		store_fruit.Visible = false;
 		wanted_fruit.Visible = true;
-		store_current_color = (int) st.current_color;
+		store_current_color = (int) st.CurrentColor;
 	}
 	
 	private void _on_Fruit_body_entered(object body)

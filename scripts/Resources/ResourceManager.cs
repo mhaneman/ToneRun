@@ -29,36 +29,38 @@ public class ResourceManager
 		ResourceSaver.Save(ProcSkyLoc, ProcSky, 0);
 	}
 
+	// low contrast
 	private Color[] FlatColors =
 	{
-		new Color("#15EA62"),
-		new Color("#BC11EE"),
-		new Color("#0CF3F3"),
-		new Color("#0152FE"),
-		new Color("#FF5300"),
-		new Color("#FFEB00"),
-		new Color("#040A0B"),
+		new Color("#352c2e"), // strawberry
+		new Color("#494639"), // orange
+		new Color("#a5a27d"), // banana
+		new Color("#ecf4c8"), // pear
+		new Color("#211f3d"), // blueberry
+		new Color("#281e2b"), // eggplant
+		new Color("#141414"), // special
 	};
 
+	// high contrast
 	private Color[] StairColors =
 	{
-		new Color("#6215EA"),
-		new Color("#11EEBC"),
-		new Color("#F30CF3"),
-		new Color("#FE0152"),
-		new Color("#00FF53"),
-		new Color("#00FFEB"),
-		new Color("#1DAEE2"),
+		new Color("#e5bee8"),
+		new Color("#ffb7b7"),
+		new Color("#ffde93"),
+		new Color("#42593b"),
+		new Color("#7aadd3"),
+		new Color("#e5c6f4"),
+		new Color("#ffffff"),
 	};
 
 	private Color[] SkyColors =
 	{
-		new Color("#6215EA"),
-		new Color("#11EEBC"),
-		new Color("#F30CF3"),
-		new Color("#FE0152"),
-		new Color("#00FF53"),
-		new Color("#00FFEB"),
-		new Color("#1DAEE2"),
+		new Color("#fcedf0"),
+		new Color("#fcfaea"),
+		new Color("#fffdea"),
+		new Color("#eeffea"),
+		new Color("#eaf6ff"),
+		new Color("#f9f2fc"),
+		new Color("#ffffff"),
 	};
 }

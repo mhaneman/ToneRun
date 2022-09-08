@@ -26,7 +26,7 @@ public class Singleton : Node
 	Random rand = new Random();
 	public override void _Ready()
 	{
-		this.CurrentColor = rand.Next(8);
+		this.CurrentColor = rand.Next(7);
 		resourceManager = new ResourceManager(CurrentColor);
 
 
@@ -37,7 +37,7 @@ public class Singleton : Node
 
 	private void on_ChangeColor()
 	{
-		this.CurrentColor = rand.Next(8);
+		this.CurrentColor = rand.Next(7);
 		resourceManager.ChangeTones(CurrentColor);
 	}
 }

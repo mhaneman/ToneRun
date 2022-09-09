@@ -22,7 +22,8 @@ public class ResourceManager
 		platformShaderFlat.SetShaderParam("albedo", FlatColors[tone]);
 		platformShaderStair.SetShaderParam("albedo", StairColors[tone]);
 
-		ProcSky.SkyHorizonColor = ProcSky.GroundHorizonColor = SkyColors[tone];
+		// ProcSky.SkyHorizonColor = SkyHorizionColors[tone];
+		// ProcSky.GroundHorizonColor = SkyHorizionColors[tone];
 
 		ResourceSaver.Save(platformShaderFlatLoc, platformShaderFlat, 0);
 		ResourceSaver.Save(platformShaderStairLoc, platformShaderStair, 0);
@@ -50,17 +51,6 @@ public class ResourceManager
 		new Color("#42593b"),
 		new Color("#7aadd3"),
 		new Color("#e5c6f4"),
-		new Color("#ffffff"),
-	};
-
-	private Color[] SkyColors =
-	{
-		new Color("#fcedf0"),
-		new Color("#fcfaea"),
-		new Color("#fffdea"),
-		new Color("#eeffea"),
-		new Color("#eaf6ff"),
-		new Color("#f9f2fc"),
 		new Color("#ffffff"),
 	};
 }

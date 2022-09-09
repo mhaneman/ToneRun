@@ -55,7 +55,6 @@ environment = ExtResource( 10 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="WorldEnvironment"]
 transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 100, 100 )
-light_energy = 0.5
 
 [connection signal="Swiped" from="SwipeDetector" to="Platforms" method="on_Swiped"]
 [connection signal="Swiped" from="SwipeDetector" to="Player" method="_on_SwipeDetector_Swiped"]

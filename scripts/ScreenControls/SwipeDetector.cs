@@ -6,7 +6,7 @@ public class SwipeDetector : Node
 	[Signal] delegate void Swiped(string direction);
 	private Vector2 start_pos;
 	private bool can_detect = false;
-	private float detect_radius = 100f;
+	private float detect_radius = 50f;
 
 	public override void _UnhandledInput(InputEvent @event) {
 		if (@event is InputEventScreenTouch eventKey) 

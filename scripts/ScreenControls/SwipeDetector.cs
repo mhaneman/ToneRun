@@ -22,6 +22,16 @@ public class SwipeDetector : Node
 	
 	public override void _Process(float delta)
 	{
+		/* for PC play */
+		if (Input.IsActionJustPressed("left"))
+			EmitSignal("Swiped", "left");
+		if (Input.IsActionJustPressed("right"))
+			EmitSignal("Swiped", "right");
+		if (Input.IsActionJustPressed("jump"))
+			EmitSignal("Swiped", "jump");
+		if (Input.IsActionJustPressed("down"))
+			EmitSignal("Swiped", "down");
+
 		if (can_detect)
 		{
 			Vector2 cur_pos = GetViewport().GetMousePosition();

@@ -16,7 +16,7 @@ axis_lock_motion_x = true
 axis_lock_motion_z = true
 move_lock_x = true
 move_lock_z = true
-collision/safe_margin = 0.005
+collision/safe_margin = 0.01
 moving_platform_apply_velocity_on_leave = 2
 script = ExtResource( 1 )
 

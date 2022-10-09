@@ -28,6 +28,7 @@ public class Platforms : Spatial
         PlatformTransformLerp();
     }
 
+    // moves the platforms to look like payer is changing lanes
     private void PlatformTransformLerp()
     {
         Transform trans = this.GlobalTransform;

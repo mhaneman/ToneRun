@@ -9,7 +9,6 @@ public class Belt : Spatial
 	public PooledObject<Area> fruitQueue;
 	public ulong distance {get; set;} = 0;
 	public float Speed;
-	private float MaxSpeed;
 	private float SpeedInc;
 	private int NumOfLanes;
 	private float PlatformSpacing;
@@ -28,8 +27,7 @@ public class Belt : Spatial
 		this.PlatformSpacing = st.PlatformSpacing;
 		this.MaxPlatformWidth = st.MaxPlatformWidth;
 		this.Speed = st.InitalSpeed;
-		this.MaxSpeed = st.MaxSpeed;
-		this.SpeedInc = st.SpeedInc;
+		
 		this.FruitSpacing = st.FruitSpacing;
 		
 		Despawn = GetNode<Area>("Despawn");
@@ -51,7 +49,7 @@ public class Belt : Spatial
 		platformQueue.AddObjType("gap", "res://scenes/Platforms/Gap.tscn", 15);
 	}
 	
-	public override void _PhysicsProcess(float delta) 
+	public override void _Process(float delta) 
 	{
 		if (distance == 0)
 			InitalizeLanes();
@@ -60,14 +58,10 @@ public class Belt : Spatial
 
 		foreach(var n in fruitQueue.working)
 		{
-			Transform trans = n.GlobalTransform;
-			trans.origin.z += Speed * delta;
-			n.GlobalTransform = trans;
+			n.GlobalTranslate(Vector3.Back * Speed * delta);
 		}
 
 		distance++;
-		if (Speed < MaxSpeed)
-			Speed += SpeedInc;
 	}
 
 	private void SummonFruitsOnPlatform(Transform start, Transform end)
@@ -121,27 +115,26 @@ public class Belt : Spatial
 
 	private string RandomPlatformType(float Height, int n)
 	{
-		//stairs can only connect to flats
+		// rules for the random
 		string prev_type = platformQueue.Head[n].Filename;
+		float mid_height = platformQueue.Head[1].GlobalTransform.origin.y;
 		if (Height <= 0f)
 			return "stair";
 		else if (Height >= 25f)
 			return "down";
-		else if (prev_type == "res://scenes/Platforms/Stair.tscn" || prev_type == "res://scenes/Platforms/Down.tscn")
+
+		float r = (float) rand.NextDouble();
+		if (r < 0.4)
 			return "flat";
-		else if (prev_type == "res://scenes/Platforms/Flat.tscn" && rand.Next(2) != 0)
-			return "flat";
-		else if (prev_type == "res://scenes/Platforms/Gap.tscn" && rand.Next(3) != 0)
-			return "gap";
-		else if (rand.Next(2) != 0)
+		if (r < (0.5f + ((Height < mid_height) ? 0.1f : 0f)) * ((prev_type == "res://scenes/Platforms/Down.tscn") ? 0f: 1f))
 			return "stair";
-		else if (rand.Next(4) != 0)
+		if (r < (0.6f + ((Height > mid_height) ? 0.1f : 0f)) * ((prev_type == "res://scenes/Platforms/Stair.tscn") ? 0f: 1f))
 			return "down";
-		else if (rand.Next(4) != 0)
-			return "up";
-		else if (rand.Next(2) != 0)
+		if (r < 0.7 * ((prev_type == "res://scenes/Platforms/Gap.tscn" || prev_type == "res://scenes/Platforms/Down.tscn") ? 0f: 1f))
 			return "gap";
-		
+		if (r < 0.8 * ((prev_type == "res://scenes/Platforms/Gap.tscn" || prev_type == "res://scenes/Platforms/Down.tscn") ? 0f: 1f))
+			return "up";
+
 		return "flat";
 	}
 

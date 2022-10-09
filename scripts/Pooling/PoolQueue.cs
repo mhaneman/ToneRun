@@ -69,9 +69,7 @@ public class PoolQueue<T> : Node where T : Spatial
 		{
 			foreach(var j in i.working)
 			{
-				Transform trans = j.GlobalTransform;
-				trans.origin.z += Speed * delta;
-				j.GlobalTransform = trans;
+				j.GlobalTranslate(Vector3.Back * Speed * delta);
 			}
 		}
 	}

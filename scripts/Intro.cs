@@ -7,6 +7,9 @@ public class Intro : Spatial
 	private RigidBody Player;
 	private Camera camera;
 	private Area area;
+	
+	private PackedScene mainGameScene;
+
 	public override void _Ready()
 	{
 		camera = GetNode<Camera>("Camera");
@@ -17,6 +20,8 @@ public class Intro : Spatial
 		ThrowDetector.Connect("Throw", this, "on_Throw");
 
 		area.Connect("body_exited", this, "on_BodyExited");
+		
+		mainGameScene = GD.Load<PackedScene>("res://scenes/World/World.tscn");
 	}
 
 	public override void _Process(float delta)
@@ -34,6 +39,6 @@ public class Intro : Spatial
 
 	private void on_BodyExited(object body)
 	{
-		GetTree().ChangeScene("res://scenes/World/World.tscn");
+		GetTree().ChangeSceneTo(mainGameScene);
 	}
 }

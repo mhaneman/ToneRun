@@ -38,9 +38,9 @@ public class Player : KinematicBody
 		skin.PlayAnimation("running-loop", 3f);
 	}
 	
-	public override void _PhysicsProcess(float delta) 
+	// changed from PhysicsProcess due to jittering
+	public override void _Process(float delta) 
 	{
-		base._PhysicsProcess(delta);
 		gravity_physics(delta);
 	}
 	

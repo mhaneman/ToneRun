@@ -15,9 +15,10 @@ public class Singleton : Node
 	public float PlatformSpacing = 8f;
 	public float FruitSpacing = 4f;
 	public float MaxPlatformWidth = 2f;
+
 	public float InitalSpeed = 30f;
 	public float MaxSpeed = 70f;
-	public float SpeedInc = 0.002f;
+	
 	public int fruits = 0;
 
 
@@ -26,18 +27,16 @@ public class Singleton : Node
 	Random rand = new Random();
 	public override void _Ready()
 	{
-		this.CurrentColor = rand.Next(7);
+		this.CurrentColor = rand.Next(6);
 		resourceManager = new ResourceManager(CurrentColor);
 
 
 		this.Connect("ChangeColor", this, "on_ChangeColor");
 	}
 
-	
-
 	private void on_ChangeColor()
 	{
-		this.CurrentColor = rand.Next(7);
+		this.CurrentColor = rand.Next(6);
 		resourceManager.ChangeTones(CurrentColor);
 	}
 }
